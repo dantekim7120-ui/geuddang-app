@@ -738,20 +738,7 @@ async function loadDetailInfo(item) {
         if(satBtn) satBtn.onclick=()=>window.open(`https://map.naver.com/p/entry/address/${d.lng},${d.lat}?c=15,0,1,0,dh`,'_blank');
         if(rvBtn) rvBtn.onclick=()=>window.open(`https://map.naver.com/p/entry/address/${d.lng},${d.lat}?c=15,0,0,0,dh&mapType=pano`,'_blank');
       }
-      // 공시지가
-      if(d?.jiga?.length) {
-        const e=document.getElementById('infoPriceList');
-        if(e) e.textContent=d.jiga[0].text || d.jiga.map(p=>`${p.year}년 ${p.baseMon}월 ㎡당 ${Number(p.jiga).toLocaleString()}원`).join(' / ');
-      } else {
-        const e=document.getElementById('infoPriceList'); if(e) e.textContent='—';
-      }
-      // 토지이용
-      if(d?.landuse?.useArea) {
-        const e=document.getElementById('infoLanduse');
-        if(e) e.textContent=d.landuse.useArea;
-      } else {
-        const e=document.getElementById('infoLanduse'); if(e) e.textContent='—';
-      }
+
     })
     .catch(()=>{ clearTimeout(timeout); const el=document.getElementById('infoRoadAddr'); if(el)el.textContent='—'; });
 
