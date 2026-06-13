@@ -784,7 +784,7 @@ async function loadDetailInfo(item) {
       const satBtn=document.getElementById('btnSatellite');
       const rvBtn=document.getElementById('btnRoadview');
       if(d?.lat && d?.lng) {
-        if(satBtn) satBtn.onclick=()=>window.open(`https://map.kakao.com/?q=${encodeURIComponent(d.roadAddr||item.jibun||'')}&map_type=SKYVIEW`,'_blank');
+        if(satBtn) satBtn.onclick=()=>window.open(`https://map.kakao.com/link/skyview/${d.lat},${d.lng}`,'_blank');
         if(rvBtn) rvBtn.onclick=()=>window.open(`https://map.kakao.com/link/roadview/${d.lat},${d.lng}`,'_blank');
       } else {
         const addr=encodeURIComponent((item.jibun||item.cltrNm||'').trim());
