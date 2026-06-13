@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>항공뷰 테스트</title>
+<style>
+body{margin:0;padding:0;background:#0f1115;}
+#map{width:100vw;height:100vh;}
+</style>
+</head>
+<body>
+<div id="map"></div>
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=ac30852e09638a740912d3baa193d439&libraries=services"></script>
+<script>
+const address = '경북 안동시 길안면 송사리 197-10';
+const geocoder = new kakao.maps.services.Geocoder();
+const map = new kakao.maps.Map(document.getElementById('map'), {
+  center: new kakao.maps.LatLng(36.3671, 128.9270),
+  level: 3
+});
+map.setMapTypeId(kakao.maps.MapTypeId.SKYVIEW);
+
+geocoder.addressSearch(address, function(result, status) {
+  if (status !== kakao.maps.services.Status.OK) return;
+  const lat = parseFloat(result[0].y);
+  const lng = parseFloat(result[0].x);
+  const center = new kakao.maps.LatLng(lat, lng);
+  map.setCenter(center);
+  map.setLevel(3);
+  new kakao.maps.Marker({ position: center, map });
+});
+</script>
+</body>
+</html>
