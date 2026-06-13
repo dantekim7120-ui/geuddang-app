@@ -732,19 +732,23 @@ async function loadDetailInfo(item) {
   if(extraEl) extraEl.remove();
   const extra = document.createElement('div');
   extra.id='infoExtra';
+  const enc=encodeURIComponent(jibun.trim());
   extra.innerHTML=`
     <div style="margin:0 18px 12px;background:var(--surface2);border-radius:10px;border:1px solid var(--border);overflow:hidden;">
       <div style="padding:10px 14px;background:rgba(3,199,90,.08);border-bottom:1px solid var(--border);font-size:12px;font-weight:700;color:#03c75a;letter-spacing:.04em;">📍 위치</div>
       <div style="padding:12px 14px;display:flex;flex-direction:column;gap:8px;">
         <div style="font-size:13px;color:var(--text2);">${jibun.trim()}</div>
         <div style="display:flex;gap:8px;">
-          <button onclick="window.open('https://map.naver.com/p/search/${encodeURIComponent(jibun.trim())}','_blank')" style="flex:1;background:rgba(3,199,90,.15);border:1px solid rgba(3,199,90,.3);color:#03c75a;border-radius:9px;padding:11px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;">🗺 네이버 지도</button>
-          <button onclick="window.open('https://map.naver.com/p/search/${encodeURIComponent(jibun.trim())}?c=15,0,0,0,dh','_blank')" style="flex:1;background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.25);color:var(--warn);border-radius:9px;padding:11px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;">🛰 위성사진</button>
+          <button onclick="window.open('https://map.naver.com/p/search/${enc}','_blank')" style="flex:1;background:rgba(3,199,90,.15);border:1px solid rgba(3,199,90,.3);color:#03c75a;border-radius:9px;padding:11px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;">🗺 네이버 지도</button>
+          <button onclick="window.open('https://map.naver.com/p/search/${enc}?c=15,0,0,0,dh','_blank')" style="flex:1;background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.25);color:var(--warn);border-radius:9px;padding:11px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;">🛰 위성사진</button>
         </div>
-        <div style="display:flex;gap:8px;">
-          <button onclick="window.open('https://map.vworld.kr/map/vworldmap.do','_blank')" style="flex:1;background:rgba(79,127,255,.1);border:1px solid rgba(79,127,255,.25);color:var(--accent);border-radius:9px;padding:11px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;">📋 토지이용계획</button>
-          <button onclick="window.open('https://map.naver.com/p/search/${encodeURIComponent(jibun.trim())}?mode=streetview','_blank')" style="flex:1;background:rgba(139,147,176,.1);border:1px solid rgba(139,147,176,.25);color:var(--text2);border-radius:9px;padding:11px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;">🚶 거리뷰</button>
-        </div>
+        <button onclick="window.open('https://map.naver.com/p/search/${enc}?mode=streetview','_blank')" style="width:100%;background:rgba(139,147,176,.1);border:1px solid rgba(139,147,176,.25);color:var(--text2);border-radius:9px;padding:11px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;">🚶 거리뷰</button>
+      </div>
+    </div>
+    <div style="margin:0 18px 12px;background:var(--surface2);border-radius:10px;border:1px solid var(--border);overflow:hidden;">
+      <div style="padding:10px 14px;background:rgba(124,92,252,.08);border-bottom:1px solid var(--border);font-size:12px;font-weight:700;color:var(--accent2);letter-spacing:.04em;">🗺 토지이용계획</div>
+      <div style="padding:12px 14px;">
+        <button onclick="window.open('https://www.eum.go.kr/web/ar/lu/luLandDtlServlet.jsp?pnu=${item.pnu||''}','_blank')" style="width:100%;background:rgba(124,92,252,.15);border:1px solid rgba(124,92,252,.3);color:var(--accent2);border-radius:9px;padding:11px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;">📋 토지이음에서 보기</button>
       </div>
     </div>`;
   const summaryLabel = document.getElementById('infoSummaryLabel');
