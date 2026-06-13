@@ -755,7 +755,7 @@ async function loadDetailInfo(item) {
         <div style="font-size:13px;color:var(--text2);">${jibun.trim()}</div>
         <div style="display:flex;gap:8px;">
           <button id="btnMap" style="flex:1;background:rgba(3,199,90,.15);border:1px solid rgba(3,199,90,.3);color:#03c75a;border-radius:9px;padding:11px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;">🗺 일반지도</button>
-          <button id="btnSatellite" style="flex:1;background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.25);color:var(--warn);border-radius:9px;padding:11px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;">🛰 위성지도</button>
+          <button id="btnSky" style="flex:1;background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.25);color:var(--warn);border-radius:9px;padding:11px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;">🛰 위성지도</button>
         </div>
         <button id="btnRoadview" style="width:100%;background:rgba(139,147,176,.1);border:1px solid rgba(139,147,176,.25);color:var(--text2);border-radius:9px;padding:11px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;">🚶 로드뷰</button>
       </div>
@@ -771,13 +771,13 @@ async function loadDetailInfo(item) {
 
   // 버튼 onclick 초기화 후 즉시 세팅
   const mapBtnInit=document.getElementById('btnMap');
-  const satBtnInit=document.getElementById('btnSatellite');
+  const skyBtnInit=document.getElementById('btnSky');
   const rvBtnInit=document.getElementById('btnRoadview');
   if(mapBtnInit) mapBtnInit.onclick=null;
-  if(satBtnInit) satBtnInit.onclick=null;
+  if(skyBtnInit) skyBtnInit.onclick=null;
   if(rvBtnInit) rvBtnInit.onclick=null;
   if(mapBtnInit) mapBtnInit.onclick=()=>window.open('https://map.kakao.com/?q='+enc+'&map_type=TYPE_MAP','_blank');
-  if(satBtnInit) satBtnInit.onclick=()=>window.open('https://map.kakao.com/?q='+enc+'&map_type=HYBRID','_blank');
+  if(skyBtnInit) skyBtnInit.onclick=()=>window.open('https://map.kakao.com/?q='+enc+'&map_type=HYBRID','_blank');
   if(rvBtnInit) rvBtnInit.onclick=()=>window.open('https://map.kakao.com/?q='+enc,'_blank');
 
   const timeout = setTimeout(()=>{ const el=document.getElementById('infoRoadAddr'); if(el)el.textContent='—'; }, 3000);
@@ -788,10 +788,10 @@ async function loadDetailInfo(item) {
       const el=document.getElementById('infoRoadAddr');
       if(el) el.textContent=d?.roadAddr||'—';
       const mapBtn=document.getElementById('btnMap');
-      const satBtn=document.getElementById('btnSatellite');
+      const skyBtn=document.getElementById('btnSky');
       const rvBtn=document.getElementById('btnRoadview');
       if(mapBtn) mapBtn.onclick=()=>window.open('https://map.kakao.com/?q='+enc+'&map_type=TYPE_MAP','_blank');
-      if(satBtn) satBtn.onclick=()=>window.open('https://map.kakao.com/?q='+enc+'&map_type=HYBRID','_blank');
+      if(skyBtn) skyBtn.onclick=()=>window.open('https://map.kakao.com/?q='+enc+'&map_type=HYBRID','_blank');
       if(d?.lat && d?.lng) {
         if(rvBtn) rvBtn.onclick=()=>window.open('https://map.kakao.com/link/roadview/'+d.lat+','+d.lng,'_blank');
       } else {
@@ -877,7 +877,7 @@ function closeInfoModal(e) {
     document.getElementById('infoModal').style.display='none';
     document.body.style.overflow='';
     const nb=document.getElementById('btnMap');
-    const sb=document.getElementById('btnSatellite');
+    const sb=document.getElementById('btnSky');
     const rb=document.getElementById('btnRoadview');
     if(nb) nb.onclick=null;
     if(sb) sb.onclick=null;
