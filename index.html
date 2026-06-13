@@ -723,7 +723,7 @@ async function loadDetailInfo(item) {
       // 공시지가
       if(d?.jiga?.length) {
         const e=document.getElementById('infoPriceList');
-        if(e) e.textContent=d.jiga.map(p=>`${p.year}년 ${p.baseMon}월 ㎡당 ${Number(p.jiga).toLocaleString()}원`).join(' / ');
+        if(e) e.textContent=d.jiga[0].text || d.jiga.map(p=>`${p.year}년 ${p.baseMon}월 ㎡당 ${Number(p.jiga).toLocaleString()}원`).join(' / ');
       } else {
         const e=document.getElementById('infoPriceList'); if(e) e.textContent='—';
       }
