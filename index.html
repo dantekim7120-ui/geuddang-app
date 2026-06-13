@@ -247,10 +247,6 @@ body{font-family:'Pretendard',-apple-system,sans-serif;background:var(--bg);colo
   <div style="display:flex;align-items:center;padding:10px 14px;background:var(--surface);border-bottom:1px solid var(--border);gap:10px;">
     <button onclick="closeEumViewer()" style="background:rgba(124,92,252,.15);border:1px solid rgba(124,92,252,.3);color:var(--accent2);border-radius:8px;padding:7px 14px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;">← 돌아가기</button>
     <span style="font-size:13px;font-weight:700;color:var(--accent2);">🗺 토지이용계획 (토지이음)</span>
-    <div style="margin-left:auto;display:flex;gap:6px;">
-      <button id="eumTabGeneral" onclick="switchEumLandGbn('1')" style="padding:5px 12px;border-radius:7px;border:1px solid rgba(124,92,252,.4);background:rgba(124,92,252,.25);color:var(--accent2);font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;">🌾 일반</button>
-      <button id="eumTabMtn" onclick="switchEumLandGbn('2')" style="padding:5px 12px;border-radius:7px;border:1px solid rgba(124,92,252,.2);background:transparent;color:var(--text2);font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;">🌲 산</button>
-    </div>
   </div>
   <iframe id="eumViewerFrame" src="" style="flex:1;width:100%;border:none;" loading="lazy"></iframe>
 </div>
@@ -759,7 +755,7 @@ async function loadDetailInfo(item) {
         <div style="font-size:13px;color:var(--text2);">${jibun.trim()}</div>
         <div style="display:flex;gap:8px;">
           <button id="btnNaver" style="flex:1;background:rgba(3,199,90,.15);border:1px solid rgba(3,199,90,.3);color:#03c75a;border-radius:9px;padding:11px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;">🗺 네이버 지도</button>
-          <button id="btnSatellite" style="flex:1;background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.25);color:var(--warn);border-radius:9px;padding:11px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;">🛰 항공사진</button>
+          <button id="btnSatellite" style="flex:1;background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.25);color:var(--warn);border-radius:9px;padding:11px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;">🛰 위성사진</button>
         </div>
         <button id="btnRoadview" style="width:100%;background:rgba(139,147,176,.1);border:1px solid rgba(139,147,176,.25);color:var(--text2);border-radius:9px;padding:11px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;">🚶 로드뷰</button>
       </div>
@@ -833,49 +829,31 @@ async function loadDetailInfo(item) {
   document.getElementById('infoContent').style.display='block';
 }
 
-let _eumPnu = '';
 function openEumViewer(url, landGbn) {
-  // pnu 추출
-  const m = url.match(/pnu=([^&]+)/);
-  if(m) _eumPnu = m[1];
-  _loadEum(landGbn);
-}
-function _loadEum(landGbn) {
   const viewer = document.getElementById('eumViewer');
   const frame = document.getElementById('eumViewerFrame');
-  if (!viewer) return;
+  if (!viewer || !frame) return;
+  frame.src = url;
   viewer.style.display = 'flex';
   document.body.style.overflow = 'hidden';
-  if(frame) frame.style.display = 'none';
-  let eumBody = document.getElementById('eumBody');
-  if(!eumBody){
-    eumBody = document.createElement('div');
-    eumBody.id = 'eumBody';
-    eumBody.style.cssText = 'flex:1;overflow-y:auto;background:#fff;padding:16px;font-size:13px;color:#333;';
-    viewer.appendChild(eumBody);
-  }
-  eumBody.innerHTML = '<div style="text-align:center;padding:40px;color:#888;">토지이용계획 불러오는 중...</div>';
-  const isGeneral = (landGbn !== '2');
-  const tabG = document.getElementById('eumTabGeneral');
-  const tabM = document.getElementById('eumTabMtn');
-  if(tabG){ tabG.style.background = isGeneral?'rgba(124,92,252,.25)':'transparent'; tabG.style.color = isGeneral?'var(--accent2)':'var(--text2)'; }
-  if(tabM){ tabM.style.background = !isGeneral?'rgba(124,92,252,.25)':'transparent'; tabM.style.color = !isGeneral?'var(--accent2)':'var(--text2)'; }
-  fetch(`${SERVER_URL}/api/eum?pnu=${_eumPnu}&landGbn=${landGbn}`)
-    .then(r => r.ok ? r.text() : Promise.reject(r))
-    .then(html => {
-      // 결과 테이블 영역만 추출
-      const parser = new DOMParser();
-      const doc = parser.parseFromString(html, 'text/html');
-      const result = doc.querySelector('.result_wrap') || doc.querySelector('#contents') || doc.querySelector('.land_info') || doc.body;
-      eumBody.innerHTML = result ? result.innerHTML : html;
-    })
-    .catch(() => {
-      eumBody.innerHTML = '<div style="text-align:center;padding:40px;color:#888;">토지이용계획 조회에 실패했습니다.</div>';
-    });
-}
-function switchEumLandGbn(gbn) {
-  if(!_eumPnu) return;
-  _loadEum(gbn);
+  frame.onload = function() {
+    try {
+      const doc = frame.contentDocument || frame.contentWindow.document;
+      // 산/일반 드롭다운 선택
+      const landGbnSelect = doc.querySelector('select[name="landGbn"]') || doc.querySelector('#landGbn');
+      if (landGbnSelect) {
+        landGbnSelect.value = landGbn || '1';
+        landGbnSelect.dispatchEvent(new Event('change', { bubbles: true }));
+      }
+      // 열람 버튼 클릭
+      setTimeout(() => {
+        try {
+          const searchBtn = doc.querySelector('button.btn-search') || doc.querySelector('input[type="button"]') || doc.querySelector('.btn-srch') || doc.querySelector('button[onclick*="search"]');
+          if (searchBtn) searchBtn.click();
+        } catch(e) {}
+      }, 500);
+    } catch(e) {}
+  };
 }
 function closeEumViewer() {
   const viewer = document.getElementById('eumViewer');
@@ -1134,5 +1112,3 @@ window.addEventListener('load',()=>{setAutoInterval();fetchHomeData(false);});
 </script>
 </body>
 </html>
-
-
