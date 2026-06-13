@@ -779,8 +779,8 @@ async function loadDetailInfo(item) {
       if(d?.lat && d?.lng) {
         const satBtn=document.getElementById('btnSatellite');
         const rvBtn=document.getElementById('btnRoadview');
-        if(satBtn) satBtn.onclick=()=>window.open(`https://map.kakao.com/link/skyview/${d.lat},${d.lng}`,'_blank');
-        if(rvBtn) rvBtn.onclick=()=>window.open(`https://map.kakao.com/link/roadview/${d.lat},${d.lng}`,'_blank');
+        if(satBtn) satBtn.onclick=()=>window.open(`https://map.kakao.com/link/skyview/${d.lng},${d.lat}`,'_blank');
+        if(rvBtn) rvBtn.onclick=()=>window.open(`https://map.kakao.com/link/roadview/${d.lng},${d.lat}`,'_blank');
       }
 
     })
