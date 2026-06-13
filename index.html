@@ -742,8 +742,6 @@ async function loadDetailInfo(item) {
     ['지번 주소', item.jibun?item.jibun.trim():'—'],
     ['도로명 주소', `<span id="infoRoadAddr">${roadAddr}</span>`],
     ['면적', `${item.area?Number(item.area).toFixed(1)+'㎡':'—'}`],
-    ['공시지가', `<span id="infoPriceList">조회 중...</span>`],
-    ['토지이용', `<span id="infoLanduse">조회 중...</span>`],
     ['감정가', `<span style="color:var(--accent);font-weight:700;">${price}</span>`],
     ['최저입찰가', `<span style="color:var(--success);font-weight:700;">${minPrice}</span>${discountRate>0?` <span style="font-size:11px;color:var(--warn);">-${discountRate}%</span>`:''}`],
     ['입찰 마감', `<span style="${item.daysLeft<=3?'color:var(--danger)':'color:var(--text)'};font-weight:700;">${dl}</span>`],
@@ -785,19 +783,20 @@ async function loadDetailInfo(item) {
   const summaryLabel = document.getElementById('infoSummaryLabel');
   document.getElementById('infoContent').insertBefore(extra, summaryLabel);
 
-  // 토지이음 백그라운드 확인 후 iframe 또는 정보없음 표시
+  // 토지이음 iframe 표시
   if (item.pnu) {
     const eumUrl = `https://www.eum.go.kr/web/ar/lu/luLandDet.jsp?pnu=${item.pnu}&isNoScr=script&mode=search`;
     const container = document.getElementById(`eumContainer_${item.pnu}`);
     const loading = document.getElementById(`eumLoading_${item.pnu}`);
     fetch(eumUrl).then(r => r.text()).then(html => {
-      if (html.includes('Code:4017') || html.includes('검색이 안되는 필지')) {
-        if (loading) loading.textContent = '이 필지는 토지이음 미등록 지역입니다.';
+      if (!container) return;
+      if (html.includes('Code:4017') || html.includes('검색이 안되는 필지') || html.includes('시스템 에러')) {
+        container.innerHTML = `<div style="text-align:center;color:var(--text2);font-size:13px;padding:8px 0;">이 필지는 토지이음 미등록 지역입니다.</div>`;
       } else {
-        if (container) container.innerHTML = `<iframe src="${eumUrl}" style="width:100%;height:500px;border:none;border-radius:6px;" loading="lazy"></iframe>`;
+        container.innerHTML = `<iframe src="${eumUrl}" style="width:100%;height:520px;border:none;border-radius:6px;" loading="lazy"></iframe>`;
       }
     }).catch(() => {
-      if (loading) loading.textContent = '토지이용계획 조회에 실패했습니다.';
+      if (container) container.innerHTML = `<div style="text-align:center;color:var(--text2);font-size:13px;padding:8px 0;">토지이용계획 조회에 실패했습니다.</div>`;
     });
   }
   document.getElementById('infoSummaryLabel').textContent='⚠️ 유의사항';
