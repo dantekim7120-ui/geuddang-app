@@ -769,10 +769,13 @@ async function loadDetailInfo(item) {
   const summaryLabel = document.getElementById('infoSummaryLabel');
   document.getElementById('infoContent').insertBefore(extra, summaryLabel);
 
-  // 버튼 초기 onclick 즉시 세팅
+  // 버튼 onclick 초기화 후 즉시 세팅
   const naverBtnInit=document.getElementById('btnNaver');
   const satBtnInit=document.getElementById('btnSatellite');
   const rvBtnInit=document.getElementById('btnRoadview');
+  if(naverBtnInit) naverBtnInit.onclick=null;
+  if(satBtnInit) satBtnInit.onclick=null;
+  if(rvBtnInit) rvBtnInit.onclick=null;
   if(naverBtnInit) naverBtnInit.onclick=()=>window.open('https://map.naver.com/p/search/'+enc,'_blank');
   if(satBtnInit) satBtnInit.onclick=()=>window.open('https://map.kakao.com/?q='+enc,'_blank');
   if(rvBtnInit) rvBtnInit.onclick=()=>window.open('https://map.kakao.com/?q='+enc,'_blank');
@@ -873,6 +876,12 @@ function closeInfoModal(e) {
   if(!e||e.target===document.getElementById('infoModal')){
     document.getElementById('infoModal').style.display='none';
     document.body.style.overflow='';
+    const nb=document.getElementById('btnNaver');
+    const sb=document.getElementById('btnSatellite');
+    const rb=document.getElementById('btnRoadview');
+    if(nb) nb.onclick=null;
+    if(sb) sb.onclick=null;
+    if(rb) rb.onclick=null;
   }
 }
 
