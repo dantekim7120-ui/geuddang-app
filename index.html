@@ -722,25 +722,6 @@ async function loadDetailInfo(item) {
 
   // 도로명 주소 비동기 조회 (3초 타임아웃)
   let roadAddr = '조회 중...';
-  const timeout = setTimeout(()=>{ const el=document.getElementById('infoRoadAddr'); if(el)el.textContent='—'; }, 3000);
-  fetch(`${SERVER_URL}/api/landinfo?addr=${encodeURIComponent((item.jibun||'').trim())}&pnu=${item.pnu||''}&onbidCltrno=${item.onbidCltrno||''}&onbidPbancNo=${item.pbancNo||''}&pbctNo=${item.pbctNo||''}&pbctCdtnNo=${item.pbctCdtnNo||''}`)
-    .then(r=>r.ok?r.json():null)
-    .then(d=>{
-      clearTimeout(timeout);
-      const el=document.getElementById('infoRoadAddr');
-      if(el) el.textContent=d?.roadAddr||'—';
-      // 좌표 기반 버튼 업데이트
-      if(d?.lat && d?.lng) {
-        const naverBtn=document.getElementById('btnNaver');
-        const satBtn=document.getElementById('btnSatellite');
-        const rvBtn=document.getElementById('btnRoadview');
-        if(naverBtn){ naverBtn.removeAttribute('disabled'); naverBtn.style.opacity='1'; naverBtn.onclick=()=>window.open(`https://map.naver.com/p/entry/address/${d.lng},${d.lat}?c=15,0,0,0,dh`,'_blank'); }
-        if(satBtn){ satBtn.removeAttribute('disabled'); satBtn.style.opacity='1'; satBtn.onclick=()=>window.open(`https://map.naver.com/p/entry/address/${d.lng},${d.lat}?c=15,0,1,0,dh`,'_blank'); }
-        if(rvBtn){ rvBtn.removeAttribute('disabled'); rvBtn.style.opacity='1'; rvBtn.onclick=()=>window.open(`https://map.naver.com/p/entry/address/${d.lng},${d.lat}?c=15,0,0,0,dh&mapType=pano`,'_blank'); }
-      }
-
-    })
-    .catch(()=>{ clearTimeout(timeout); const el=document.getElementById('infoRoadAddr'); if(el)el.textContent='—'; });
 
   const rows=[
     ['남은 일정', urgency],
@@ -787,6 +768,26 @@ async function loadDetailInfo(item) {
     </div>`;
   const summaryLabel = document.getElementById('infoSummaryLabel');
   document.getElementById('infoContent').insertBefore(extra, summaryLabel);
+
+  const timeout = setTimeout(()=>{ const el=document.getElementById('infoRoadAddr'); if(el)el.textContent='—'; }, 3000);
+  fetch(`${SERVER_URL}/api/landinfo?addr=${encodeURIComponent((item.jibun||'').trim())}&pnu=${item.pnu||''}&onbidCltrno=${item.onbidCltrno||''}&onbidPbancNo=${item.pbancNo||''}&pbctNo=${item.pbctNo||''}&pbctCdtnNo=${item.pbctCdtnNo||''}`)
+    .then(r=>r.ok?r.json():null)
+    .then(d=>{
+      clearTimeout(timeout);
+      const el=document.getElementById('infoRoadAddr');
+      if(el) el.textContent=d?.roadAddr||'—';
+      // 좌표 기반 버튼 업데이트
+      if(d?.lat && d?.lng) {
+        const naverBtn=document.getElementById('btnNaver');
+        const satBtn=document.getElementById('btnSatellite');
+        const rvBtn=document.getElementById('btnRoadview');
+        if(naverBtn){ naverBtn.removeAttribute('disabled'); naverBtn.style.opacity='1'; naverBtn.onclick=()=>window.open(`https://map.naver.com/p/entry/address/${d.lng},${d.lat}?c=15,0,0,0,dh`,'_blank'); }
+        if(satBtn){ satBtn.removeAttribute('disabled'); satBtn.style.opacity='1'; satBtn.onclick=()=>window.open(`https://map.naver.com/p/entry/address/${d.lng},${d.lat}?c=15,0,1,0,dh`,'_blank'); }
+        if(rvBtn){ rvBtn.removeAttribute('disabled'); rvBtn.style.opacity='1'; rvBtn.onclick=()=>window.open(`https://map.naver.com/p/entry/address/${d.lng},${d.lat}?c=15,0,0,0,dh&mapType=pano`,'_blank'); }
+      }
+
+    })
+    .catch(()=>{ clearTimeout(timeout); const el=document.getElementById('infoRoadAddr'); if(el)el.textContent='—'; });
 
   // 토지이음 확인 후 버튼 표시
   if (item.pnu) {
