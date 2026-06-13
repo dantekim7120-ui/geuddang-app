@@ -769,6 +769,14 @@ async function loadDetailInfo(item) {
   const summaryLabel = document.getElementById('infoSummaryLabel');
   document.getElementById('infoContent').insertBefore(extra, summaryLabel);
 
+  // 버튼 초기 onclick 즉시 세팅
+  const naverBtnInit=document.getElementById('btnNaver');
+  const satBtnInit=document.getElementById('btnSatellite');
+  const rvBtnInit=document.getElementById('btnRoadview');
+  if(naverBtnInit) naverBtnInit.onclick=()=>window.open('https://map.naver.com/p/search/'+enc,'_blank');
+  if(satBtnInit) satBtnInit.onclick=()=>window.open('https://map.kakao.com/?q='+enc,'_blank');
+  if(rvBtnInit) rvBtnInit.onclick=()=>window.open('https://map.kakao.com/?q='+enc,'_blank');
+
   const timeout = setTimeout(()=>{ const el=document.getElementById('infoRoadAddr'); if(el)el.textContent='—'; }, 3000);
   fetch(`${SERVER_URL}/api/landinfo?addr=${encodeURIComponent((item.jibun||'').trim())}&pnu=${item.pnu||''}&onbidCltrno=${item.onbidCltrno||''}&onbidPbancNo=${item.pbancNo||''}&pbctNo=${item.pbctNo||''}&pbctCdtnNo=${item.pbctCdtnNo||''}`)
     .then(r=>r.ok?r.json():null)
