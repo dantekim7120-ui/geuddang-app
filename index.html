@@ -702,7 +702,8 @@ async function openItemInfo(itemId, mode) {
   document.getElementById('infoLoading').style.display='block';
   document.getElementById('infoContent').style.display='none';
   document.getElementById('infoWarning').style.display='none';
-  document.getElementById('infoViewBtn').onclick=()=>window.open(detailUrl,'_blank');
+  document.getElementById('infoViewBtn').setAttribute('data-url', detailUrl);
+  document.getElementById('infoViewBtn').onclick=function(){window.open(this.getAttribute('data-url'),'_blank');};
   document.getElementById('infoModal').style.display='flex';
   document.body.style.overflow='hidden';
   try {
