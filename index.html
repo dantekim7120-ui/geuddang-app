@@ -800,7 +800,8 @@ async function loadDetailInfo(item) {
 
   // 토지이음 확인 후 버튼 표시
   if (item.pnu) {
-    const eumUrl = `https://www.eum.go.kr/web/ar/lu/luLandDet.jsp?pnu=${item.pnu}&isNoScr=script&mode=search&landGbn=${d?.landGbn||'1'}`;
+    const landGbn = (item.pnu.length >= 11 && item.pnu[10] === '2') ? '2' : '1';
+    const eumUrl = `https://www.eum.go.kr/web/ar/lu/luLandDet.jsp?pnu=${item.pnu}&isNoScr=script&mode=search&landGbn=${landGbn}`;
     const containerId = `eumContainer_${item.pnu}`;
     fetch(eumUrl).then(r => r.text()).then(html => {
       const container = document.getElementById(containerId);
